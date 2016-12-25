@@ -1,0 +1,56 @@
+{%- extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="col-xs-6 col-xs-offset-3">
+      <h1>List of Objects in Bucket <code>{{ bucket_name }}</code></h1>
+      <ul>
+      {% for object in objects %}
+        <li>
+          <p><a href="{{ object.get_link }}"><code>{{ object.name }}</code></a>, with size of {{ object.size }} bytes, last modified {{ object.last_modified }}. (<a href="{{ object.delete_link }}">delete</a>)</p>
+        </li>
+      {% endfor %}
+      </ul>
+      <h2>Create Object</h2>
+      <form method="POST" action={{ create_object_link }} enctype="multipart/form-data">
+        <input type="hidden" name="bucket" value="{{ bucket_name }}">
+        <div class="form-group">
+          <label for="object">Object name</label>
+          <input class="form-control" type="text" name="object" placeholder="Object name">
+        </div>
+        <div class="form-group">
+          <label for="up_object">File</label>
+          <input class="form-control" type="file" name="up_object">
+        </div>
+        <button type="submit" class="btn btn-default">Create Object</button>
+      </form>
+      <h2>Copy Object from This Bucket</h2>
+      <form method="POST" action={{ copy_object_link }}>
+        <input type="hidden" name="source_bucket" value="{{ bucket_name }}">
+        <div class="form-group">
+          <label for="source_object">Source Object</label>
+          <select class="form-control" name="source_object">
+          {% for object in objects %}
+            <option>{{ object.name }}</option>
+          {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="destination_bucket">Destination Bucket</label>
+          <select class="form-control" name="destination_bucket">
+          {% for bucket in bucket_names %}
+            <option>{{ bucket }}</option>
+          {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="destination_object">Destination Object Name</label>
+          <input type="text" class="form-control" name="destination_object" placeholder="Object name">
+        </div>
+        <button type="submit" class="btn btn-default">Copy Object</button>
+      </form>
+      <hr>
+      <p><a href="{{ url_for('get_all_buckets') }}">Home</a></p>
+    </div>
+  </div>
+{% endblock %}

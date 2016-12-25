@@ -1,0 +1,24 @@
+{%- extends "base.html" %}
+
+{% block content %}
+  <div class="container">
+    <div class="col-xs-6 col-xs-offset-3">
+      <h1>List of Buckets</h1>
+      <ul>
+      {% for bucket in buckets %}
+        <li>
+          <p><a href="{{ bucket.get_link }}"><code>{{ bucket.name }}</code></a>, with {{ bucket.file_count }} objects and total size of {{ bucket.size }} bytes. (<a href="{{ bucket.delete_link }}">delete</a>)</p>
+        </li>
+      {% endfor %}
+      </ul>
+      <h2>Create Bucket</h2>
+      <form method="POST" action={{ create_bucket_link }}>
+        <div class="form-group">
+          <label for="bucket">Bucket name</label>
+          <input class="form-control" type="text" name="bucket" placeholder="Bucket name">
+        </div>
+        <button type="submit" class="btn btn-default">Create Bucket</button>
+      </form>
+    </div>
+  </div>
+{% endblock %}

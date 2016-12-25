@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve simple-file-uploader-swift
+After=network.target
+
+[Service]
+User=sokokaleb
+Group=www-data
+WorkingDirectory=/var/www/ceph-gw-client-py
+Environment="PATH=/home/vagrant/.py-envs/ceph-gw-client-py/bin"
+ExecStart=/home/vagrant/.py-envs/ceph-gw-client-py/bin/uwsgi --ini ceph-gw-client-py.ini
+
+[Install]
+WantedBy=multi-user.target
