@@ -110,7 +110,10 @@ def delete_bucket(conn, bucket_name):
 @attach_conn
 def create_bucket(conn):
     bucket_name = request.form.get('bucket')
-    conn.put_container(bucket_name)
+    conn.put_container(bucket_name,
+            headers={
+                'X-Container-Read': '.r:*'
+            })
     return redirect(url_for('get_all_buckets'))
 
 # download a file
@@ -141,7 +144,10 @@ def create_object(conn):
     if object_name == '' or type(object_name) == 'undefined':
         object_name = uploaded_file.filename
     buf = uploaded_file.read()
-    conn.put_object(bucket_name, object_name, buf)
+    conn.put_object(bucket_name, object_name, buf,
+            headers={
+                'X-Container-Read': '.r:*'
+            })
     return redirect(url_for('get_all_objects', bucket_name=bucket_name))
 
 # copy object between buckets
